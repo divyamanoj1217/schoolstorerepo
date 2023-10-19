@@ -1,0 +1,193 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            margin: 10px 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        input[type="submit"],
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover,
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            text-decoration: none;
+        }
+        </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Registration Form</h1>
+        <form action="{% url 'user_form' %}" method="post">
+            {% csrf_token %}
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name" required>
+
+            <label for="dob">DOB:</label>
+            <input type="date" name="dob" id="dob" required>
+
+            <label for="age">Age:</label>
+            <input type="number" name="age" id="age" required>
+
+            <label for="gender">Gender:</label>
+            <input type="radio" name="gender" value="male"> Male
+            <input type="radio" name="gender" value="female"> Female
+
+            <label for="phone_number">Phone Number:</label>
+            <input type="tel" name="phone_number" id="phone_number" required>
+
+            <label for="email">Mail ID:</label>
+            <input type="email" name="email" id="email" required>
+
+            <label for="address">Address:</label>
+            <textarea name="address" id="address" rows="4" required></textarea>
+
+            <label for="department">Departments:</label>
+            <select name="department" id="id_department" required>
+                <option value="">Select Department</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Commerce">Commerce</option>
+                <option value="Humanities">Humanities</option>
+                <option value="Fine Arts">Fine Arts</option>
+                <option value="Science">Science</option>
+            </select>
+
+            <label for="course">Courses:</label>
+            <select name="course" id="courses" required>
+                <option value="">Select Department First</option>
+            </select>
+
+            <label for="purpose">Purpose:</label>
+            <select name="purpose" required>
+                <option value="">Select Purpose</option>
+                <option value="enquiry">For Enquiry</option>
+                <option value="order">Place Order</option>
+                <option value="return">Return</option>
+            </select>
+
+            <label>Materials Provided:</label>
+            <input type="checkbox" name="materials_provided" value="Debit Note Book"> Debit Note Book
+            <input type="checkbox" name="materials_provided" value="Pen"> Pen
+            <input type="checkbox" name="materials_provided" value="Exam Papers"> Exam Papers
+            <hr>
+            <div class="button-container">
+                <input type="submit" value="Submit"><br><br><hr>
+                <div id="message" style="display: none;">
+                    <p>Order Confirmed</p>
+                    <a href="/">Return to Home Page</a><hr>
+                 </div>
+                    <button type="submit" formaction="{% url 'logout' %}">Logout</button><br><br><hr>
+            </div>
+        </form>
+    </div>
+    <script>
+    // Display the confirmation message when the form is submitted
+    document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        // Assuming you have an element with the id "message" to display the message
+        document.getElementById('message').style.display = 'block';
+    });
+    </script>
+    <script>
+    function updateCourseDropdown() {
+    var departmentDropdown = document.getElementById('id_department');
+    var courseDropdown = document.querySelector('select[name="course"]');
+    var selectedDepartment = departmentDropdown.value;
+
+    // Clear the current course options
+    courseDropdown.innerHTML = '';
+
+    // Define course options based on the selected department
+    var courseOptions = {
+        'Computer Science': ['BCA', 'MCA', 'Bsc IT', 'Msc IT'],
+        'Commerce': ['Chartered Accountancy', 'BCom', 'MCom'],
+        'Humanities': ['BA History', 'BA Economics', 'BA Sociology'],
+        'Fine Arts': ['Diploma in Photography', 'BFA', 'MFA'],
+        'Science': ['Nursing', 'BPharm', 'MPharm']
+    };
+
+    // Populate the course dropdown based on the selected department
+    if (selectedDepartment in courseOptions) {
+        courseOptions[selectedDepartment].forEach(function (course) {
+            var option = document.createElement('option');
+            option.value = course;
+            option.text = course;
+            courseDropdown.appendChild(option);
+        });
+    }
+}
+
+// Add an event listener to the department dropdown
+document.getElementById('id_department').addEventListener('change', updateCourseDropdown);
+
+// Initialize the course dropdown based on the initial department value
+updateCourseDropdown();
+</script>
+</body>
+</html>
+
+
